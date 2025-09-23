@@ -12,7 +12,7 @@ export default function ForgotPasswordForm() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/forgot-password-test', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/forgot-password-test`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ export default function ForgotPasswordForm() {
 
       if (response.ok) {
         alert("Password reset link has been sent to your email! Please check your inbox and click the link to reset your password.");
-        router.push('/login');
+        router.push(process.env.NEXT_PUBLIC_REDIRECT_AFTER_FORGOT_PASSWORD || '/login');
       } else {
         // Check if response is JSON before parsing
         const contentType = response.headers.get('content-type');

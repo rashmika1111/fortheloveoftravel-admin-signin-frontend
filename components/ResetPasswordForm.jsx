@@ -43,7 +43,7 @@ export default function ResetPasswordForm() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/auth/reset-password",
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/reset-password`,
         {
           method: "POST",
           headers: {
@@ -60,7 +60,7 @@ export default function ResetPasswordForm() {
 
       if (response.ok) {
         alert("Password has been reset successfully!");
-        router.push("/login");
+        router.push(process.env.NEXT_PUBLIC_REDIRECT_AFTER_RESET_PASSWORD || "/login");
       } else {
         alert(data.message || "Failed to reset password. Please try again.");
       }

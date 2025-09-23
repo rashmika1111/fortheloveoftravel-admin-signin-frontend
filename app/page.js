@@ -1,3 +1,4 @@
+import LoginForm from "../components/LoginForm";
 
 export const metadata = {
   title: "Home",
@@ -41,8 +42,7 @@ export const metadata = {
 export default function Home() {
   return (
     <div>
-
-      this is main page js
+      <LoginForm />
     </div>
   );
 }

@@ -14,13 +14,30 @@ export default function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+//api fetching isung .env possible in future
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      });
 
-    // Simulate API call
-    await new Promise((res) => setTimeout(res, 1000));
-
-    setLoading(false);
-    alert("Logged in successfully!");
-    router.push("/dashboard"); // redirect after login
+      if (response.ok) {
+        const data = await response.json();
+        alert("Logged in successfully!");
+        router.push(process.env.NEXT_PUBLIC_REDIRECT_AFTER_LOGIN || "/dashboard"); // redirect after login
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || "Failed to login. Please try again.");
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert("Failed to login. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
