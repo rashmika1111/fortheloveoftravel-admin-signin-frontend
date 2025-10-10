@@ -36,10 +36,13 @@ export default function SignupForm() {
     }
 
     try {
+      // Only send required fields to backend (exclude confirmPassword)
+      const { confirmPassword, ...signupData } = form;
+      
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(signupData),
       });
 
       if (response.ok) {
