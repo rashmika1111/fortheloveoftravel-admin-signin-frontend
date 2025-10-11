@@ -1,0 +1,6 @@
+# API Configuration
+NEXT_PUBLIC_API_URL=http://localhost:4000/api  #bakcend calling
+
+# Redirect Configuration
+NEXT_PUBLIC_REDIRECT_AFTER_LOGIN=/dashboard  #admin panel redirect
+
