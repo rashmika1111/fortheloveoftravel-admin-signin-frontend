@@ -17,6 +17,9 @@ export default function LoginForm() {
     setLoading(true);
 
     try {
+      console.log('API URL:', process.env.NEXT_PUBLIC_API_URL);
+      console.log('Login data:', form);
+      
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -24,16 +27,30 @@ export default function LoginForm() {
         credentials: "include",
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response ok:', response.ok);
+
       if (response.ok) {
+        const data = await response.json();
+        console.log('Login success data:', data);
+        
+        // Handle user role data for permission purposes
+        if (data.user && data.user.role) {
+          localStorage.setItem('userRole', data.user.role);
+          localStorage.setItem('userInfo', JSON.stringify(data.user));
+          console.log('User role stored:', data.user.role);
+        }
+        
         alert("Logged in successfully!");
         router.push(process.env.NEXT_PUBLIC_REDIRECT_AFTER_LOGIN || "/dashboard");
       } else {
         const errorData = await response.json();
-        alert(errorData.message || "Failed to login. Please try again.");
+        console.error('Backend error:', errorData);
+        alert(`Backend Error: ${errorData.message || `Status ${response.status}`}`);
       }
     } catch (error) {
-      console.error("Login error:", error);
-      alert("Failed to login. Please try again.");
+      console.error("Frontend/Network error:", error);
+      alert(`Frontend Error: ${error.message}. Check if backend is running on ${process.env.NEXT_PUBLIC_API_URL}`);
     } finally {
       setLoading(false);
     }
