@@ -77,7 +77,7 @@ export const metadata = {
   alternates: {
     canonical: "https://fortheloveoftravel.nz",
   },
-  category: "Travel",
+  category: "Travel"
 };
 
 export default function RootLayout({ children }) {
@@ -85,6 +85,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
+        suppressHydrationWarning={true}
       >
         {children}
       </body>

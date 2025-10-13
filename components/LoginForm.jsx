@@ -26,7 +26,13 @@ export default function LoginForm() {
 
       if (response.ok) {
         alert("Logged in successfully!");
-        router.push(process.env.NEXT_PUBLIC_REDIRECT_AFTER_LOGIN || "/dashboard");
+        const redirectUrl = process.env.NEXT_PUBLIC_REDIRECT_AFTER_LOGIN || "/dashboard";
+        // Check if it's an external URL
+        if (redirectUrl.startsWith('http')) {
+          window.location.href = redirectUrl;
+        } else {
+          router.push(redirectUrl);
+        }
       } else {
         const errorData = await response.json();
         alert(errorData.message || "Failed to login. Please try again.");
