@@ -8,6 +8,20 @@ export default function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  // Cookie helper functions
+  const setCookie = (name, value, days = 1) => {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
+  };
+
+  const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
+    return null;
+  };
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -34,12 +48,9 @@ export default function LoginForm() {
         const data = await response.json();
         console.log('Login success data:', data);
         
-        // Handle user role data for permission purposes
-        if (data.user && data.user.role) {
-          localStorage.setItem('userRole', data.user.role);
-          localStorage.setItem('userInfo', JSON.stringify(data.user));
-          console.log('User role stored:', data.user.role);
-        }
+        // Backend sets JWT token in httpOnly cookie automatically
+        // No need to store token in frontend - backend handles it
+        console.log('Login successful - JWT token set by backend in httpOnly cookie');
         
         alert("Logged in successfully!");
         router.push(process.env.NEXT_PUBLIC_REDIRECT_AFTER_LOGIN || "/dashboard");
