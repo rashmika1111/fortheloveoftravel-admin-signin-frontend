@@ -53,7 +53,13 @@ export default function LoginForm() {
         console.log('Login successful - JWT token set by backend in httpOnly cookie');
         
         alert("Logged in successfully!");
-        router.push(process.env.NEXT_PUBLIC_REDIRECT_AFTER_LOGIN || "/dashboard");
+        const redirectUrl = process.env.NEXT_PUBLIC_REDIRECT_AFTER_LOGIN || "/dashboard";
+        // Check if it's an external URL
+        if (redirectUrl.startsWith('http')) {
+          window.location.href = redirectUrl;
+        } else {
+          router.push(redirectUrl);
+        }
       } else {
         const errorData = await response.json();
         console.error('Backend error:', errorData);
